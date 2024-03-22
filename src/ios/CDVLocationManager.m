@@ -32,7 +32,7 @@
     [self pauseEventPropagationToDom]; // Before the DOM is loaded we'll just keep collecting the events and fire them later.
 
     [self initLocationManager];
-    [self initPeripheralManager];
+    // [self initPeripheralManager];
     
     self.debugLogEnabled = true;
     self.debugNotificationsEnabled = false;
@@ -54,6 +54,7 @@
 }
 
 - (void) resumeEventPropagationToDom {
+    [self initPeripheralManager];
     [self checkEventQueue];
     [self.queue setSuspended:NO];
 }
