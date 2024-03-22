@@ -168,8 +168,8 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
         final boolean requestPermission = this.preferences.getBoolean(
                 REQUEST_BT_PERMISSION_NAME, DEFAULT_REQUEST_BT_PERMISSION);
            
-        if(requestPermission)
-              tryToRequestMarshmallowLocationPermission();
+        // if(requestPermission)
+        //       tryToRequestMarshmallowLocationPermission();
     }
 
     /**
@@ -199,6 +199,7 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
      * @return True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        debugLog("ACTION COMING IN: " + action);
         if (action.equals("onDomDelegateReady")) {
             onDomDelegateReady(callbackContext);
         } else if (action.equals("disableDebugNotifications")) {
@@ -552,6 +553,7 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
     }
 
     private void createRangingCallbacks(final CallbackContext callbackContext) {
+        debugLog("[BLUETOOTH didRangeBeaconsInRegion] 0");
 
         iBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
@@ -560,17 +562,22 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
                 threadPoolExecutor.execute(new Runnable() {
                     public void run() {
 
+                        debugLog("[BLUETOOTH didRangeBeaconsInRegion] 1");
+
                         try {
                             JSONObject data = new JSONObject();
                             JSONArray beaconData = new JSONArray();
                             for (Beacon beacon : iBeacons) {
                                 beaconData.put(mapOfBeacon(beacon));
                             }
+                            debugLog("[BLUETOOTH didRangeBeaconsInRegion] 2");
+
                             data.put("eventType", "didRangeBeaconsInRegion");
                             data.put("region", mapOfRegion(region));
                             data.put("beacons", beaconData);
 
                             debugLog("didRangeBeacons: " + data.toString());
+                            debugLog("[BLUETOOTH didRangeBeaconsInRegion] 3");
 
                             //send and keep reference to callback
                             PluginResult result = new PluginResult(PluginResult.Status.OK, data);
@@ -848,6 +855,8 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
                     region = parseRegion(arguments);
                     iBeaconManager.startMonitoringBeaconsInRegion(region);
 
+                    debugLog("startMonitoringForRegion!!!!! 1");
+
                     PluginResult result = new PluginResult(PluginResult.Status.OK);
                     result.setKeepCallback(true);
                     beaconServiceNotifier.didStartMonitoringForRegion(region);
@@ -898,14 +907,20 @@ public class LocationManager extends CordovaPlugin implements BeaconConsumer {
 
     private void startRangingBeaconsInRegion(final JSONObject arguments, final CallbackContext callbackContext) {
 
+        debugLog("[BLUETOOTH startRangingBeaconsInRegion] 0");
+
         _handleCallSafely(callbackContext, new ILocationManagerCommand() {
 
             @Override
             public PluginResult run() {
-
+                debugLog("[BLUETOOTH startRangingBeaconsInRegion] 1");
                 try {
+                    debugLog("[BLUETOOTH startRangingBeaconsInRegion] 2");
+
                     Region region = parseRegion(arguments);
                     iBeaconManager.startRangingBeaconsInRegion(region);
+
+                    debugLog("[BLUETOOTH startRangingBeaconsInRegion] 3");
 
                     PluginResult result = new PluginResult(PluginResult.Status.OK);
                     result.setKeepCallback(true);
