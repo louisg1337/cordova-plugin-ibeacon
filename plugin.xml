@@ -96,6 +96,11 @@
 			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
 
+        <service
+           android:name="org.altbeacon.beacon.service.BeaconService"
+           android:foregroundServiceType="location">
+        </service>
+
         <!-- <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <receiver android:name="org.altbeacon.beacon.startup.StartupBroadcastReceiver" android:exported="false">
                 <intent-filter>
@@ -110,7 +115,7 @@
         <source-file src="src/android/ILocationManagerCommand.java" target-dir="src/com/unarin/cordova/beacon" />
         <source-file src="src/android/PausableThreadPoolExecutor.java" target-dir="src/com/unarin/cordova/beacon" />
 
-        <framework src="src/android/cordova-plugin-ibeacon.gradle" custom="true" type="gradleReference" />
+        <!-- <framework src="src/android/cordova-plugin-ibeacon.gradle" custom="true" type="gradleReference" /> -->
         <framework src="com.android.support:support-core-utils:26+" />
     </platform>
 
